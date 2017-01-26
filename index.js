@@ -143,6 +143,8 @@ const removeEdgeBetween = async(function* (externalId1, externalId2, edgeLabels)
   gremlinQuery +=    `findAll{it.inVertex().property("externalId").value()==${externalId2}}.each{it.remove()}`
   
   let result = yield callTitan(gremlinQuery)
+
+  assert.equal(access(result, 'status.code'), 200)
   
   return result
 })
