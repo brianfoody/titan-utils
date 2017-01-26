@@ -11,7 +11,6 @@
   "dependencies": {
   },
   "peerDependencies": {
-    "assert": "^1.4.1",
     "bluebird": "^3.4.7",
     "lambda-node-utility": "^0.0.7",
     "request": "^2.79.0",

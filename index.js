@@ -159,15 +159,29 @@ const callTitan = async(function* (gremlinString) {
   
   let resultJson = JSON.parse(result)
 
-  console.log(`Titan Request: ${requestUrl}. \n Titan Response: ${util.inspect(resultJson, {depth: 1})}`)
+  console.log(`Titan Request: ${requestUrl}. \n Titan Response: ${util.inspect(resultJson, {depth: 2})}`)
 
   return resultJson
 })
+
+// Titan embeds props as ID'd objects. Just need to pluck out the actual data.
+const convertTitanArrayToJson = function(titanArray) {
+  return titanArray.map((record) => {
+    return record.reduce((accumulator, property) => {
+      // Use the label as the key and the value as the... value
+      accumulator[property.label] = property.value;
+      return accumulator;
+    }, {})
+  })
+}
+
+
 
 module.exports = {
   callTitan: callTitan,
   addEdgeBetween: addEdgeBetween,
   removeEdgeBetween: removeEdgeBetween,
+  convertTitanArrayToJson: convertTitanArrayToJson,
   createExternalIdFromDynamoRecord: createExternalIdFromDynamoRecord,
   createPropertyUpdateStringFromDynamoRecord: createPropertyUpdateStringFromDynamoRecord,
   createEdgePropertyUpdateStringFromObject: createEdgePropertyUpdateStringFromObject,
