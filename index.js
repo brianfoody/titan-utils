@@ -140,7 +140,7 @@ const addEdgeBetween = async(function* (externalId1, externalId2, edgeLabel, pro
 const removeEdgeBetween = async(function* (externalId1, externalId2, edgeLabels) {
   var gremlinQuery = `g.V().has("externalId","${externalId1}").next().`
   gremlinQuery +=    `edges(Direction.OUT${edgeLabels}).`
-  gremlinQuery +=    `findAll{it.inVertex().property("externalId").value()==${externalId2}}.each{it.remove()}`
+  gremlinQuery +=    `findAll{it.inVertex().property("externalId").value()=="${externalId2}"}.each{it.remove()}`
   
   let result = yield callTitan(gremlinQuery)
 
