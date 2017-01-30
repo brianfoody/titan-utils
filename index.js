@@ -48,6 +48,7 @@ const getVertexTitanId = async(function* (id) {
   return resultCheckData && resultCheckData.length > 0 ? resultCheckData[0] : undefined
 })
 
+const escapeStr = (str) => JSON.stringify(str)
 
 const createPropertyUpdateStringFromDynamoRecord = (record) => {
   var flatObject = lambdaUtils.toFlatObject(record.dynamodb.NewImage)
@@ -55,7 +56,7 @@ const createPropertyUpdateStringFromDynamoRecord = (record) => {
   let updateString = ""
 
   for (var property in flatObject) {  
-    updateString += `.property("${property}","${flatObject[property]}").element()`
+    updateString += `.property("${property}","${escapeStr(flatObject[property])}").element()`
   }
 
   return updateString
@@ -65,7 +66,7 @@ const createEdgePropertyUpdateStringFromObject = (propsObj) => {
   let updateString = ""
 
   for (var property in propsObj) {  
-    updateString += `.property("${property}","${propsObj[property]}")`
+    updateString += `.property("${property}","${escapeStr(propsObj[property])}")`
   }
 
   return updateString
@@ -166,7 +167,7 @@ const callTitan = async(function* (gremlinString) {
 
 // Titan embeds props as ID'd objects. Just need to pluck out the actual data.
 const convertTitanArrayToJson = function(titanArray) {
-  return titanArray.map((record) => {
+  return (titanArray || []).map((record) => {
     return record.reduce((accumulator, property) => {
       // Use the label as the key and the value as the... value
       accumulator[property.label] = property.value;
