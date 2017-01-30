@@ -56,7 +56,7 @@ const createPropertyUpdateStringFromDynamoRecord = (record) => {
   let updateString = ""
 
   for (var property in flatObject) {  
-    updateString += `.property("${property}","${escapeStr(flatObject[property])}").element()`
+    updateString += `.property(${escapeStr(property)},${escapeStr(flatObject[property])}).element()`
   }
 
   return updateString
@@ -66,7 +66,7 @@ const createEdgePropertyUpdateStringFromObject = (propsObj) => {
   let updateString = ""
 
   for (var property in propsObj) {  
-    updateString += `.property("${property}","${escapeStr(propsObj[property])}")`
+    updateString += `.property("${escapeStr(property)}","${escapeStr(propsObj[property])}")`
   }
 
   return updateString
