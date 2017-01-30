@@ -48,7 +48,8 @@ const getVertexTitanId = async(function* (id) {
   return resultCheckData && resultCheckData.length > 0 ? resultCheckData[0] : undefined
 })
 
-const escapeStr = (str) => JSON.stringify(str)
+// Some nasty escaping issues so I'm just removing quotes and will replace when rendered.
+const escapeStr = (str) => str.replace(/"/g, '_quot_')
 
 const createPropertyUpdateStringFromDynamoRecord = (record) => {
   var flatObject = lambdaUtils.toFlatObject(record.dynamodb.NewImage)
@@ -56,7 +57,7 @@ const createPropertyUpdateStringFromDynamoRecord = (record) => {
   let updateString = ""
 
   for (var property in flatObject) {  
-    updateString += `.property(${escapeStr(property)},${escapeStr(flatObject[property])}).element()`
+    updateString += `.property("${escapeStr(property)}","${escapeStr(flatObject[property])}").element()`
   }
 
   return updateString

@@ -1,10 +1,11 @@
 {
   "name": "titan-utils",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "A utility class for helping with using titan and node.js.",
   "main": "index.js",
   "scripts": {
-    "test": "node test/convertTitanArrayToJson"
+    "test": "node test/convertTitanArrayToJson",
+    "addAndDeploy": "git add . && git commit -m 'auto commit' && git push origin master && npm publish"
   },
   "author": "Brian Foody <brianfoody@gmail.com> (http://github.com/brianfoody)",
   "license": "ISC",
