@@ -1,6 +1,6 @@
 {
   "name": "titan-utils",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "A utility class for helping with using titan and node.js.",
   "main": "index.js",
   "scripts": {
@@ -11,7 +11,7 @@
   "license": "ISC",
   "dependencies": {
     "bluebird": "^3.4.7",
-    "lambda-node-utility": "^0.0.8",
+    "dynamodb-data-types": "^3.0.0",
     "request": "^2.79.0",
     "request-promise": "^4.1.1",
     "safe-access": "^0.1.0"

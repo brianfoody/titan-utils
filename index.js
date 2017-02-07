@@ -8,7 +8,7 @@ const async = Promise.coroutine
 const access = require('safe-access')
 const assert = require('assert')
 const rp = require('request-promise')
-const lambdaUtils = require('lambda-node-utility')
+var attr = require('dynamodb-data-types').AttributeValue
 
 const createOrUpdateDynamoItem = async(function* (record, entityName) {
   var externalId = createExternalIdFromDynamoRecord(record)
@@ -52,7 +52,7 @@ const getVertexTitanId = async(function* (id) {
 const escapeStr = (str) => str.replace(/"/g, '_quot_')
 
 const createPropertyUpdateStringFromDynamoRecord = (record) => {
-  var flatObject = lambdaUtils.toFlatObject(record.dynamodb.NewImage)
+  var flatObject = attr.unwrap(record.dynamodb.NewImage)
 
   let updateString = ""
 
@@ -74,7 +74,7 @@ const createEdgePropertyUpdateStringFromObject = (propsObj) => {
 }
 
 const createExternalIdFromDynamoRecord = (record) => {
-  var flatKeys = lambdaUtils.toFlatObject(record.dynamodb.Keys)
+  var flatKeys = attr.unwrap(record.dynamodb.Keys)
   let keyString = ""
 
   for (var property in flatKeys) {  
