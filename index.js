@@ -49,7 +49,7 @@ const getVertexTitanId = async(function* (id) {
 })
 
 // Some nasty escaping issues so I'm just removing quotes and will replace when rendered.
-const escapeStr = (str) => str.replace(/"/g, '_quot_')
+const escapeStr = (str) => str.replace(/"/g, '_quot_').replace(/\r?\n|\r/g, "")
 
 const createPropertyUpdateStringFromDynamoRecord = (record) => {
   var flatObject = attr.unwrap(record.dynamodb.NewImage)
