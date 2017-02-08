@@ -49,7 +49,26 @@ const getVertexTitanId = async(function* (id) {
 })
 
 // Some nasty escaping issues so I'm just removing quotes and will replace when rendered.
-const escapeStr = (str) => str.replace(/"/g, '_quot_').replace(/\r?\n|\r/g, "")
+const escapeStr = (str) => {
+  return typeof str !== "string" ? str : 
+    str.replace(/"/g, '_quot_')
+       .replace(/\r?\n|\r/g, "")
+       .replace(/#/g, '_hash_')
+       .replace(/;/g, '_semicolon_')
+       .replace(/%/g, '_percentage_')
+       .replace(/&/g, '_and_')
+       .replace(/\\/g, '_backslash_')
+}
+
+const unescapeStr = (str) => {
+  return typeof str !== "string" ? str : 
+    str.replace(/_quot_/g, '"')
+       .replace(/_hash_/g, '#')
+       .replace(/_semicolon_/g, ';')
+       .replace(/_percentage_/g, '%')
+       .replace(/_and_/g, '&')
+       .replace(/_backslash_/g, '\\')
+}
 
 const createPropertyUpdateStringFromDynamoRecord = (record) => {
   var flatObject = attr.unwrap(record.dynamodb.NewImage)
@@ -178,8 +197,10 @@ const convertTitanArrayToJson = function(titanArray) {
 }
 
 
-
 module.exports = {
+  escapeStr: escapeStr,
+  unescapeStr: unescapeStr,
+  escapeStr: escapeStr,
   callTitan: callTitan,
   addEdgeBetween: addEdgeBetween,
   removeEdgeBetween: removeEdgeBetween,
