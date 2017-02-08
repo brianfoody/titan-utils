@@ -55,6 +55,7 @@ const escapeStr = (str) => {
        .replace(/\r?\n|\r/g, "")
        .replace(/#/g, '_hash_')
        .replace(/;/g, '_semicolon_')
+       .replace(/\$/g, '_dollar_')
        .replace(/%/g, '_percentage_')
        .replace(/&/g, '_and_')
        .replace(/\\/g, '_backslash_')
@@ -66,6 +67,7 @@ const unescapeStr = (str) => {
        .replace(/_hash_/g, '#')
        .replace(/_semicolon_/g, ';')
        .replace(/_percentage_/g, '%')
+       .replace(/_dollar_/g, '$')
        .replace(/_and_/g, '&')
        .replace(/_backslash_/g, '\\')
 }
