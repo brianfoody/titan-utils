@@ -37,10 +37,7 @@ const updateProperty = async(function* (externalId, propertyName, propertyVal) {
     console.log(`Trying to set ${propertyName} to ${propertyVal} for ${externalId} but it does not exist`)
     return
   }
-  let propString = createPropertyUpdateStringFromDynamoRecord(record)
-
-  let exists = yield checkVertexExists(externalId)
-
+  
   let updateString = `g.V().has("externalId","${externalId}").property("${propertyName}","${propertyVal}")`
   
   let updateResultJson = yield callTitan(updateString)
