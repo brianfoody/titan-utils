@@ -30,6 +30,26 @@ const createOrUpdateDynamoItem = async(function* (record, entityName) {
   return updateResultJson
 })
 
+const updateProperty = async(function* (externalId, propertyName, propertyVal) {
+  let exists = yield checkVertexExists(externalId)
+
+  if (!exists) {
+    console.log(`Trying to set ${propertyName} to ${propertyVal} for ${externalId} but it does not exist`)
+    return
+  }
+  let propString = createPropertyUpdateStringFromDynamoRecord(record)
+
+  let exists = yield checkVertexExists(externalId)
+
+  let updateString = `g.V().has("externalId","${externalId}").property("${propertyName}","${propertyVal}")`
+  
+  let updateResultJson = yield callTitan(updateString)
+
+  assert.equal(access(updateResultJson, 'status.code'), 200)
+
+  return updateResultJson
+})
+
 const checkVertexExists = async(function* (externalId) {
   let resultCheckJson = yield callTitan(`g.V().has("externalId","${externalId}")`)
   
@@ -54,6 +74,7 @@ const escapeStr = (str) => {
     str.replace(/"/g, '_quot_')
        .replace(/\r?\n|\r/g, "")
        .replace(/#/g, '_hash_')
+       .replace(/�/g, ' ')
        .replace(/;/g, '_semicolon_')
        .replace(/\$/g, '_dollar_')
        .replace(/%/g, '_percentage_')
@@ -202,7 +223,6 @@ const convertTitanArrayToJson = function(titanArray) {
 module.exports = {
   escapeStr: escapeStr,
   unescapeStr: unescapeStr,
-  escapeStr: escapeStr,
   callTitan: callTitan,
   addEdgeBetween: addEdgeBetween,
   removeEdgeBetween: removeEdgeBetween,
@@ -212,5 +232,6 @@ module.exports = {
   createEdgePropertyUpdateStringFromObject: createEdgePropertyUpdateStringFromObject,
   checkVertexExists: checkVertexExists,
   getVertexTitanId: getVertexTitanId,
+  updateProperty: updateProperty,
   createOrUpdateDynamoItem: createOrUpdateDynamoItem
 }
