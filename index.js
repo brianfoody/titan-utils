@@ -90,17 +90,24 @@ const unescapeStr = (str) => {
        .replace(/_backslash_/g, '\\')
 }
 
+const _padStringIfNeeded = (flatObject, property) => {
+  return typeof flatObject[property] === "string" ? 
+    `.property("${escapeStr(property)}","${escapeStr(flatObject[property])}").element()` :
+    `.property("${escapeStr(property)}",${flatObject[property]}).element()`
+}
+
 const createPropertyUpdateStringFromDynamoRecord = (record) => {
   var flatObject = attr.unwrap(record.dynamodb.NewImage)
 
   let updateString = ""
 
   for (var property in flatObject) {  
-    updateString += `.property("${escapeStr(property)}","${escapeStr(flatObject[property])}").element()`
+    updateString += _padStringIfNeeded(flatObject, property)
   }
 
   return updateString
 }
+
 const createEdgePropertyUpdateStringFromObject = (propsObj) => {
 
   let updateString = ""
