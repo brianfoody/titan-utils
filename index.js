@@ -90,10 +90,10 @@ const unescapeStr = (str) => {
        .replace(/_backslash_/g, '\\')
 }
 
-const _padStringIfNeeded = (flatObject, property) => {
+const _escapeStringIfNeeded = (flatObject, property) => {
   return typeof flatObject[property] === "string" ? 
     `.property("${escapeStr(property)}","${escapeStr(flatObject[property])}").element()` :
-    `.property("${escapeStr(property)}",${flatObject[property]}).element()`
+    `.property("${escapeStr(property)}","${flatObject[property]}").element()`
 }
 
 const createPropertyUpdateStringFromDynamoRecord = (record) => {
@@ -102,7 +102,7 @@ const createPropertyUpdateStringFromDynamoRecord = (record) => {
   let updateString = ""
 
   for (var property in flatObject) {  
-    updateString += _padStringIfNeeded(flatObject, property)
+    updateString += _escapeStringIfNeeded(flatObject, property)
   }
 
   return updateString
