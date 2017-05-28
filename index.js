@@ -173,6 +173,8 @@ module.exports = {
   addEdgeBetween: addEdgeBetween,
   removeEdgeBetween: removeEdgeBetween,
   convertTitanArrayToJson: convertTitanArrayToJson,
+  createDynamoItem: createDynamoItem,
+  updateDynamoItem: updateDynamoItem,
   createExternalIdFromDynamoRecord: createExternalIdFromDynamoRecord,
   createPropertyUpdateStringFromDynamoRecord: createPropertyUpdateStringFromDynamoRecord,
   createEdgePropertyUpdateStringFromObject: createEdgePropertyUpdateStringFromObject,
