@@ -31,15 +31,15 @@ const createOrUpdateDynamoItem = async(function* (record, entityName) {
 const createDynamoItem = function (record, entityName) {
   const externalId = createExternalIdFromDynamoRecord(record)
   const propString = createPropertyUpdateStringFromDynamoRecord(record)
-  const updateString += `graph.addVertex(T.label,"${entityName}","externalId","${externalId}")${propString}`
+  const createString = `graph.addVertex(T.label,"${entityName}","externalId","${externalId}")${propString}`
 
-  return updateString
+  return createString
 }
 
 const updateDynamoItem = function (record, entityName) {
   const externalId = createExternalIdFromDynamoRecord(record)
   const propString = createPropertyUpdateStringFromDynamoRecord(record)
-  const updateString += `g.V().has("externalId","${externalId}").next()${propString}`
+  const updateString = `g.V().has("externalId","${externalId}").next()${propString}`
 
   return updateString
 }
