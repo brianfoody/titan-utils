@@ -28,6 +28,22 @@ const createOrUpdateDynamoItem = async(function* (record, entityName) {
   return updateString
 })
 
+const createDynamoItem = function (record, entityName) {
+  const externalId = createExternalIdFromDynamoRecord(record)
+  const propString = createPropertyUpdateStringFromDynamoRecord(record)
+  const updateString += `graph.addVertex(T.label,"${entityName}","externalId","${externalId}")${propString}`
+
+  return updateString
+}
+
+const updateDynamoItem = function (record, entityName) {
+  const externalId = createExternalIdFromDynamoRecord(record)
+  const propString = createPropertyUpdateStringFromDynamoRecord(record)
+  const updateString += `g.V().has("externalId","${externalId}").next()${propString}`
+
+  return updateString
+}
+
 // TODO Refactor
 const updateProperty = async(function* (externalId, propertyName, propertyVal) {
   let exists = yield checkVertexExists(externalId)
