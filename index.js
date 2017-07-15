@@ -20,7 +20,7 @@ const createOrUpdateDynamoItem = async(function* (record, entityName) {
 
   let updateString = ""
   if (exists) {
-    updateString += `g.V().has("externalId","${externalId}").next()${propString}`
+    updateString += `g.V().has("externalId","${externalId}")${propString}`
   } else {
     updateString += `g.addV(T.label,"${entityName}","externalId","${externalId}")${propString}`
   }
@@ -39,7 +39,7 @@ const createDynamoItem = function (record, entityName) {
 const updateDynamoItem = function (record, entityName) {
   const externalId = createExternalIdFromDynamoRecord(record)
   const propString = createPropertyUpdateStringFromDynamoRecord(record)
-  const updateString = `g.V().has("externalId","${externalId}").next()${propString}`
+  const updateString = `g.V().has("externalId","${externalId}")${propString}`
 
   return updateString
 }
