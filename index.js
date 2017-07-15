@@ -95,8 +95,8 @@ const unescapeStr = (str) => {
 
 const _escapeStringIfNeeded = (flatObject, property) => {
   return typeof flatObject[property] === "string" ? 
-    `.property("${escapeStr(property)}","${escapeStr(flatObject[property])}").element()` :
-    `.property("${escapeStr(property)}","${flatObject[property]}").element()`
+    `.property("${escapeStr(property)}","${escapeStr(flatObject[property])}")` :
+    `.property("${escapeStr(property)}","${flatObject[property]}")`
 }
 
 const createPropertyUpdateStringFromDynamoRecord = (record) => {
@@ -135,22 +135,26 @@ const createExternalIdFromDynamoRecord = (record) => {
 }
 
 
-const addEdgeBetween = function (externalId1, externalId2, edgeLabel, props) {
-  let gremlinQuery = `g.V().has("externalId","${externalId1}").next().`
-  gremlinQuery    += `addEdge("${edgeLabel}",g.V().has("externalId","${externalId2}").next(),`
-  gremlinQuery    += `"on",new Date())`
+const addEdgeBetween = function (externalId1, externalId2, edgeLabel) {
+  const unixTime = (new Date()).getTime() / 1000 | 0
+
+  let gremlinQuery = `g.V().has("externalId","${externalId1}").`
+  gremlinQuery    += `addE("${edgeLabel}").`
+  gremlinQuery    += `to(g.V().has("externalId","${externalId2}")).`
+  gremlinQuery    += `property("on",${unixTime})`
   
   return gremlinQuery
 }
 
 /**
-  Make sure edgeLabels has a comma beforehand i.e. edgeLabels = ',"edgeLabel1","edgeLabel2"'
+  Make sure edgeLabels are quoted i.e. edgeLabels = '"edgeLabel1","edgeLabel2"'
 **/
 const removeEdgeBetween = function (externalId1, externalId2, edgeLabels) {
-  var gremlinQuery = `g.V().has("externalId","${externalId1}").next().`
-  gremlinQuery +=    `edges(Direction.OUT${edgeLabels}).`
-  gremlinQuery +=    `findAll{it.inVertex().property("externalId").value()=="${externalId2}"}.each{it.remove()}`
-  
+  var gremlinQuery = `g.V().has("externalId","${externalId1}").`
+  gremlinQuery +=    `outE(${edgeLabels}).`
+  gremlinQuery +=    `where(otherV().has("externalId","${externalId2}")).`
+  gremlinQuery +=    `drop()`
+
   return gremlinQuery
 }
 
