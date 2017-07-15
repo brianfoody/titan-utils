@@ -22,7 +22,7 @@ const createOrUpdateDynamoItem = async(function* (record, entityName) {
   if (exists) {
     updateString += `g.V().has("externalId","${externalId}").next()${propString}`
   } else {
-    updateString += `graph.addVertex(T.label,"${entityName}","externalId","${externalId}")${propString}`
+    updateString += `g.addV(T.label,"${entityName}","externalId","${externalId}")${propString}`
   }
 
   return updateString
@@ -31,7 +31,7 @@ const createOrUpdateDynamoItem = async(function* (record, entityName) {
 const createDynamoItem = function (record, entityName) {
   const externalId = createExternalIdFromDynamoRecord(record)
   const propString = createPropertyUpdateStringFromDynamoRecord(record)
-  const createString = `graph.addVertex(T.label,"${entityName}","externalId","${externalId}")${propString}`
+  const createString = `g.addV(T.label,"${entityName}","externalId","${externalId}")${propString}`
 
   return createString
 }
