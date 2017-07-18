@@ -11,23 +11,6 @@ const rp = require('request-promise')
 var attr = require('dynamodb-data-types').AttributeValue
 
 
-// TODO Refactor
-const createOrUpdateDynamoItem = async(function* (record, entityName) {
-  var externalId = createExternalIdFromDynamoRecord(record)
-  let propString = createPropertyUpdateStringFromDynamoRecord(record)
-
-  let exists = yield checkVertexExists(externalId)
-
-  let updateString = ""
-  if (exists) {
-    updateString += `g.V().has("externalId","${externalId}")${propString}`
-  } else {
-    updateString += `g.addV(T.label,"${entityName}","externalId","${externalId}")${propString}`
-  }
-
-  return updateString
-})
-
 const createDynamoItem = function (record, entityName) {
   const externalId = createExternalIdFromDynamoRecord(record)
   const propString = createPropertyUpdateStringFromDynamoRecord(record)
@@ -44,22 +27,14 @@ const updateDynamoItem = function (record, entityName) {
   return updateString
 }
 
-// TODO Refactor
 const updateProperty = async(function* (externalId, propertyName, propertyVal) {
-  let exists = yield checkVertexExists(externalId)
-
-  if (!exists) {
-    console.log(`Trying to set ${propertyName} to ${propertyVal} for ${externalId} but it does not exist`)
-    return
-  }
-  
   let updateString = `g.V().has("externalId","${externalId}").property("${propertyName}","${propertyVal}")`
   
   return updateString
 })
 
 const checkVertexExists = function (externalId) {
-  return `g.V().has("externalId","${externalId}")`
+  return `g.V().has("externalId","${externalId}").label()`
 }
 
 const getVertexTitanId = function* (id) {
@@ -187,5 +162,4 @@ module.exports = {
   checkVertexExists: checkVertexExists,
   getVertexTitanId: getVertexTitanId,
   updateProperty: updateProperty,
-  createOrUpdateDynamoItem: createOrUpdateDynamoItem
 }
