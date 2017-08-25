@@ -14,7 +14,7 @@ var attr = require('dynamodb-data-types').AttributeValue
 const createDynamoItem = function (record, entityName) {
   const externalId = createExternalIdFromDynamoRecord(record)
   const propString = createPropertyUpdateStringFromDynamoRecord(record)
-  const createString = `g.addV(T.label,"${entityName}","externalId","${externalId}")${propString}`
+  const createString = `g.addV(T.label,"${entityName}","externalId","${externalId}")${propString}.id()`
 
   return createString
 }
@@ -22,7 +22,7 @@ const createDynamoItem = function (record, entityName) {
 const updateDynamoItem = function (record, entityName) {
   const externalId = createExternalIdFromDynamoRecord(record)
   const propString = createPropertyUpdateStringFromDynamoRecord(record)
-  const updateString = `g.V().has("externalId","${externalId}")${propString}`
+  const updateString = `g.V().has("externalId","${externalId}")${propString}.id()`
 
   return updateString
 }
@@ -48,6 +48,7 @@ const escapeStr = (str) => {
   return typeof str !== "string" ? str : 
     str.replace(/"/g, '_quot_')
        .replace(/'/g, '_singlequote_')
+       .replace(/\+/g, '_plus_')
        .replace(/\r?\n|\r/g, "")
        .replace(/#/g, '_hash_')
        .replace(/�/g, ' ')
@@ -62,6 +63,7 @@ const unescapeStr = (str) => {
   return typeof str !== "string" ? str : 
     str.replace(/_quot_/g, '"')
        .replace(/_singlequote_/g, "'")
+       .replace(/_plus_/g, '+')
        .replace(/_hash_/g, '#')
        .replace(/_semicolon_/g, ';')
        .replace(/_percentage_/g, '%')
