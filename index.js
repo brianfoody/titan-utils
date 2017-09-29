@@ -83,7 +83,9 @@ const createPropertyUpdateStringFromDynamoRecord = (record) => {
 
   let updateString = ""
 
-  for (var property in flatObject) {  
+  for (var property in flatObject) {
+    // Weird character that cosmos json response doesn't like
+    var cleanedUpProp = typeof property !== "string" ? property : property.replace(/\u0013/g,'')
     updateString += _escapeStringIfNeeded(flatObject, property)
   }
 
