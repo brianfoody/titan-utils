@@ -57,6 +57,10 @@ const escapeStr = (str) => {
        .replace(/%/g, '_percentage_')
        .replace(/&/g, '_and_')
        .replace(/\\/g, '_backslash_')
+       .replace(/–/g, '-')
+       .replace(/’/g, '_singlequote_')
+       .replace(/\u0013/g, '')
+       
 }
 
 const unescapeStr = (str) => {
