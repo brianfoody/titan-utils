@@ -47,6 +47,7 @@ const getVertexTitanId = function* (id) {
 const escapeStr = (str) => {
   return typeof str !== "string" ? str : 
     str.replace(/"/g, '_quot_')
+       .replace(/”/g, '_quot_')
        .replace(/'/g, '_singlequote_')
        .replace(/\+/g, '_plus_')
        .replace(/\r?\n|\r/g, "")
