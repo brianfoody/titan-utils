@@ -49,6 +49,7 @@ const escapeStr = (str) => {
     str.replace(/"/g, '_quot_')
        .replace(/”/g, '_quot_')
        .replace(/'/g, '_singlequote_')
+       .replace(/ /g, ' ')
        .replace(/\+/g, '_plus_')
        .replace(/\r?\n|\r/g, "")
        .replace(/#/g, '_hash_')
